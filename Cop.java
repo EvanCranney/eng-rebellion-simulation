@@ -5,15 +5,17 @@ public class Cop implements Occupant {
 
     private Grid grid;
     private Patch location;
+    private boolean occupied;
 
     public Cop(Grid grid, Patch location) {
         this.grid = grid;
         this.location = location;
+        this.occupied = false;
     }
 
     public void move() {
         ArrayList<Patch> targets = grid.getTargets(location);
-        
+
         if (targets.size() > 0) {
             Random rand = new Random();
             Patch target = targets.get(rand.nextInt(targets.size()));
@@ -25,7 +27,11 @@ public class Cop implements Occupant {
     }
 
     public boolean isOccupying() {
-        return true;
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 
     public void enforce() {
@@ -33,7 +39,7 @@ public class Cop implements Occupant {
         ArrayList<Agent> rebels = new ArrayList<Agent>();
         for (Occupant neighbor : neighbors) {
             if (neighbor instanceof Agent
-                && ((Agent) neighbor).isActive()) {
+                    && ((Agent) neighbor).isActive()) {
                 rebels.add((Agent) neighbor);
             }
         }

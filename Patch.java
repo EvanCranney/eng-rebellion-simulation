@@ -5,19 +5,19 @@
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.lang.Math;
 
 public class Patch {
 
-    private int row; 
+    private int row;
     private int col;
     private ArrayList<Occupant> occupants;
+    private boolean occupied;
 
     // constructor
     public Patch(int row, int col) {
         this.row = row;
         this.col = col;
+        this.occupied = false;
         occupants = new ArrayList<Occupant>();
     }
 
@@ -33,12 +33,23 @@ public class Patch {
 
     // checks whether the patch is occupied
     public boolean isOccupied() {
-        for (Occupant occupant : occupants) {
-            if (occupant.isOccupying()) {
-                return true;
-            }
-        }
-        return false;
+//        for (Occupant occupant : occupants) {
+//            if (occupant.isOccupying()) {
+//                return occupied;
+//            }
+//        }
+//        return occupied;
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+//        for (Occupant occupant : occupants) {
+//            if (!occupant.isOccupying()) {
+//                this.occupied = occupied;
+//                occupant.setOccupied(this.occupied);
+//            }
+//        }
+        this.occupied = occupied;
     }
 
     // gets all occupants
@@ -98,4 +109,10 @@ public class Patch {
         return (float) Math.hypot(rowDistance, colDistance);
     }
     */
+
+    @Override
+    public String toString() {
+        return row +
+                ", " + col;
+    }
 }

@@ -7,7 +7,6 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.lang.Math;
 
 public class Grid {
 
@@ -24,11 +23,16 @@ public class Grid {
         this.range = range;
 
         grid = generateGrid(rows, cols);
+
         neighborhoods = generateNeighborhoods(grid, range);
     }
 
     public Patch[][] getGrid() {
         return grid;
+    }
+
+    public void setGrid(Patch[][] grid) {
+        this.grid = grid;
     }
 
     private Patch[][] generateGrid(int rows, int cols) {
@@ -46,7 +50,7 @@ public class Grid {
     }
 
     private HashMap<Patch, ArrayList<Patch>> generateNeighborhoods(
-        Patch[][] grid, double range) {
+            Patch[][] grid, double range) {
         // instantiate neigbourhoods
         neighborhoods = new HashMap<Patch, ArrayList<Patch>>();
 
@@ -54,7 +58,7 @@ public class Grid {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 neighborhoods.put(grid[row][col],
-                    generateNeighborhood(grid[row][col], range));
+                        generateNeighborhood(grid[row][col], range));
             }
         }
 
@@ -62,7 +66,7 @@ public class Grid {
     }
 
     private ArrayList<Patch> generateNeighborhood(
-        Patch centre, double range) {
+            Patch centre, double range) {
         // check whether each cell in the grid is within range of centre
         int centreRow = centre.getRow();
         int centreCol = centre.getCol();
@@ -84,22 +88,22 @@ public class Grid {
         int rowDistance;
         int colDistance;
 
-        if (Math.abs(row1 - row2) < rows/2) {
+        if (Math.abs(row1 - row2) < rows / 2) {
             rowDistance = Math.abs(row1 - row2);
-        } else if (row1 < rows/2) {
+        } else if (row1 < rows / 2) {
             rowDistance = Math.abs(row1 - (row2 - rows));
         } else {
             rowDistance = Math.abs(row1 - (row2 + rows));
         }
 
-        if (Math.abs(col1 - col2) < cols/2) {
+        if (Math.abs(col1 - col2) < cols / 2) {
             colDistance = Math.abs(col1 - col2);
-        } else if (col1 < cols/2) {
+        } else if (col1 < cols / 2) {
             colDistance = Math.abs(col1 - (col2 - cols));
         } else {
             colDistance = Math.abs(col1 - (col2 + cols));
         }
-    
+
         return Math.hypot(rowDistance, colDistance);
     }
 

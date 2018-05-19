@@ -1,19 +1,12 @@
-/** 
+/**
  * Agent : a member of the general population, an entity which may rebel at
  * any point in time.
- *
  */
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Agent implements Occupant {
-
-    public enum AgentState {
-        INACTIVE,
-        ACTIVE,
-        JAILED
-    }
 
     public static final AgentState INITIAL_STATE = AgentState.INACTIVE;
     public static final int INITIAL_TERM = 0;
@@ -26,13 +19,15 @@ public class Agent implements Occupant {
 
     private Grid grid;                  // simulation grid
     private Patch location;             // current location
+    private boolean occupied;          //
 
     public Agent(double aversion, double hardship, Grid grid,
-        Patch location) {
+                 Patch location) {
         this.aversion = aversion;
         this.hardship = hardship;
         this.grid = grid;
         this.location = location;
+        this.occupied = false;
         state = Agent.INITIAL_STATE;
         term = Agent.INITIAL_TERM;
     }
@@ -45,6 +40,10 @@ public class Agent implements Occupant {
     // @override
     public boolean isOccupying() {
         return (state != AgentState.JAILED);
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 
     // moves an agent to a random, unoccupied cell, within neighbourhood,
@@ -123,8 +122,13 @@ public class Agent implements Occupant {
     }
 
     // arrest
-    public void arrest (int termerm) {
+    public void arrest(int termerm) {
         this.term = termerm;
         state = AgentState.JAILED;
     }
+
+    public Patch getLocation() {
+        return this.location;
+    }
 }
+
