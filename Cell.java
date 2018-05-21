@@ -4,6 +4,16 @@ import java.util.Random;
 import java.lang.Math;
 
 public class Cell {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_HIGHLIGHT = "\033[43m";
 
     private int row;
     private int col;
@@ -168,8 +178,23 @@ public class Cell {
     }
 
     public String toString() {
-        return ("Cell(" + Integer.toString(this.row) + "," +
-                Integer.toString(this.col) + ") " +
-                this.isOccupied() );
+        String agentList = "";
+
+        if (agents.size() != 0) {
+            for (Agent agent : agents) {
+                if (agent.getState(agent) == Agent.State.JAILED){
+                    agentList += ANSI_RED + "J" + ANSI_RESET ;
+                } else if (agent.getState(agent) == Agent.State.ACTIVE) {
+                    agentList += ANSI_GREEN + "A" + ANSI_RESET ;
+                } else {
+                    agentList += ANSI_WHITE + "Q" + ANSI_RESET ;
+                }
+            }
+        } else {
+            agentList += ANSI_BLACK + " " + ANSI_RESET ;
+        }
+
+        return ((cops.size() != 0? ANSI_HIGHLIGHT +"C" + ANSI_RESET: " ") + " " +
+                agentList+ " " );
     }
 }

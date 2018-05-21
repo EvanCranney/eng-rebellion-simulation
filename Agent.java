@@ -103,4 +103,8 @@ public class Agent implements Person {
         this.state = Agent.State.JAILED;
     }
 
+    public State getState(Agent agent){
+        return this.state;
+    }
+
 }

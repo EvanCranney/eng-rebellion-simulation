@@ -56,7 +56,11 @@ public class Rebellion {
             for (Cop cop : cops) {
                 cop.enforce();
             }
+            System.out.println();
+            printCurrentGrid(grid);
         }
+        System.out.println("\nend...\n");
+        printCurrentGrid(grid);
     }
 
     public static void printCurrentGrid(Grid grid){
@@ -95,10 +99,12 @@ public class Rebellion {
         cells = grid.asArray();
 
         // filter out the ones that are occupied (should be none)
-        for (Cell cell : cells) {
-            if (cell.isOccupied()) {
-                cells.remove(cell);
-            }
+        Iterator<Cell> iter = cells.iterator();
+        while (iter.hasNext()) {
+            Cell cell = iter.next();
+
+            if (cell.isOccupied())
+                iter.remove();
         }
 
         // shuffle the remaining cells

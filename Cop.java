@@ -10,6 +10,7 @@ public class Cop {
 
     public Cop(Cell location) {
         this.location = location;
+        this.location.enter(this);
         this.rand = new Random();
     }
 
@@ -19,8 +20,7 @@ public class Cop {
 
         // change location if possible
         if (target != null) {
-            this.location.leave(this);
-            target.enter(this);
+            this.moveTo(target);
         }
     }
 
@@ -34,7 +34,7 @@ public class Cop {
         ArrayList<Agent> active = this.location.getActiveAgentsInNeighborhood();
 
         // if active agent visible, then arrest
-        if (active.size() >= 0) {
+        if (active.size() > 0) {
             Collections.shuffle(active);
             Agent agent = active.get(0);
             Cell target = agent.getLocation();
@@ -42,4 +42,9 @@ public class Cop {
             agent.arrest(this.rand.nextInt(Rebellion.MAX_JAIL_TERM));
         }
     }
+
+    public Cell getLocation(){
+        return this.location;
+    }
+
 }
