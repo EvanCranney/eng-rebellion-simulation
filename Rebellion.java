@@ -8,12 +8,12 @@ public class Rebellion {
 
     public static final int WORLD_WIDTH = 10;
     public static final int WORLD_HEIGHT = 10;
-    public static final double VISION = 2.0;
-    public static final double AGENT_DENSITY = 0.8;
+    public static final double VISION = 1.0;
+    public static final double AGENT_DENSITY = 0.10;
     public static final double COP_DENSITY = 0.04;
-    public static final boolean MOVEMENT_ON = false;
+    public static final boolean MOVEMENT_ON = true;
 
-    public static final double GOVERNMENT_LEGITIMACY = 0.8;
+    public static final double GOVERNMENT_LEGITIMACY = 0.2;
     public static final int MAX_JAIL_TERM = 30;
 
     public static Random rand = new Random();
@@ -59,8 +59,6 @@ public class Rebellion {
             System.out.println();
             printCurrentGrid(grid);
         }
-        System.out.println("\nend...\n");
-        printCurrentGrid(grid);
     }
 
     public static void printCurrentGrid(Grid grid){

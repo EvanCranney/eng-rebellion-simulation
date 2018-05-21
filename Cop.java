@@ -17,7 +17,6 @@ public class Cop {
     public void move() {
         // get ranodm cell in vicinity
         Cell target = this.location.getRandomNeighbor();
-
         // change location if possible
         if (target != null) {
             this.moveTo(target);

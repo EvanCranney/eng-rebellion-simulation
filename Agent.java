@@ -66,13 +66,14 @@ public class Agent implements Person {
         if (this.state == Agent.State.JAILED) {
             // reduce jail-term
             this.remainingTerm--;
-            if (this.remainingTerm < 0) {
-                this.state = Agent.State.INACTIVE;
+            if (this.remainingTerm > 0) {
+                //this.state = Agent.State.INACTIVE;
+                return;
             }
-            return;
+            //return;
         }
 
-        // otherwise check if agreived
+        // otherwise check if agrieved
         if (this.computeGreivance() >= this.computeRisk() + Agent.EPSILON) {
             this.state = Agent.State.ACTIVE;
         } else {

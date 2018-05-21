@@ -13,7 +13,10 @@ public class Cell {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-    public static final String ANSI_HIGHLIGHT = "\033[43m";
+    public static final String ANSI_HIGHLIGHT_YELLOW = "\033[43m";
+    public static final String ANSI_HIGHLIGHT_GREEN = "\033[42m";
+    public static final String ANSI_HIGHLIGHT_RED = "\033[41m";
+    public static final String ANSI_HIGHLIGHT_WHITE = "\033[47m";
 
     private int row;
     private int col;
@@ -148,7 +151,9 @@ public class Cell {
     public ArrayList<Agent> getActiveAgents() {
         ArrayList<Agent> active = new ArrayList<Agent>();
         for (Agent agent : this.agents) {
-            active.add(agent);
+            if (agent.isActive()) {
+                active.add(agent);
+            }
         }
         return active;
     }
@@ -183,18 +188,19 @@ public class Cell {
         if (agents.size() != 0) {
             for (Agent agent : agents) {
                 if (agent.getState(agent) == Agent.State.JAILED){
-                    agentList += ANSI_RED + "J" + ANSI_RESET ;
+                    agentList += ANSI_HIGHLIGHT_RED + " " + ANSI_RESET ;
                 } else if (agent.getState(agent) == Agent.State.ACTIVE) {
-                    agentList += ANSI_GREEN + "A" + ANSI_RESET ;
+                    agentList += ANSI_HIGHLIGHT_GREEN + " " + ANSI_RESET ;
                 } else {
-                    agentList += ANSI_WHITE + "Q" + ANSI_RESET ;
+                    agentList += ANSI_HIGHLIGHT_WHITE + " " + ANSI_RESET ;
                 }
             }
         } else {
             agentList += ANSI_BLACK + " " + ANSI_RESET ;
         }
 
-        return ((cops.size() != 0? ANSI_HIGHLIGHT +"C" + ANSI_RESET: " ") + " " +
-                agentList+ " " );
+        return ((cops.size() != 0? ANSI_BLUE + "\uD83D\uDC6E" + ANSI_RESET:
+                "  ") +
+                agentList);
     }
 }
