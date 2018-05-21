@@ -2,10 +2,7 @@
  *
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class Rebellion {
 
@@ -33,6 +30,7 @@ public class Rebellion {
         // instantiate cops
         int numCops = computeNumCops();
         ArrayList<Cop> cops = instantiateCops(numCops, grid);
+        printCurrentGrid(grid);
 
         // driver loop
         for (int i=0; i<100; i++) {
@@ -58,6 +56,20 @@ public class Rebellion {
             for (Cop cop : cops) {
                 cop.enforce();
             }
+        }
+    }
+
+    public static void printCurrentGrid(Grid grid){
+        int rows = grid.getNumRows();
+        int cols = grid.getNumCols();
+        Cell cell;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                cell = grid.getCellAt(r, c);
+                System.out.print("[" + cell.toString() + "]");
+
+            }
+            System.out.println();
         }
     }
 
@@ -110,10 +122,12 @@ public class Rebellion {
         cells = grid.asArray();
 
         // filter out the ones that are occupied (should be none)
-        for (Cell cell : cells) {
-            if (cell.isOccupied()) {
-                cells.remove(cell);
-            }
+        Iterator<Cell> iter = cells.iterator();
+        while (iter.hasNext()) {
+            Cell cell = iter.next();
+
+            if (cell.isOccupied())
+                iter.remove();
         }
 
         // shuffle the remaining cells
