@@ -57,7 +57,7 @@ public class Cell {
 
         // no active agents in cell
         for (Agent agent : this.agents) {
-            if (agent.isActive()) {
+            if (!agent.isJailed()) {
                 return true;
             }
         }
@@ -168,6 +168,8 @@ public class Cell {
     }
 
     public String toString() {
-        return ("Cell(" + Integer.toString(this.row) + "," + Integer.toString(this.col) + ")");
+        return ("Cell(" + Integer.toString(this.row) + "," +
+                Integer.toString(this.col) + ") " +
+                this.isOccupied() );
     }
 }
