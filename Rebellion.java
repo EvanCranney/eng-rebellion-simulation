@@ -12,14 +12,14 @@ public class Rebellion {
     public static final int WORLD_WIDTH = 40;
     public static final int WORLD_HEIGHT = 40;
     public static final double VISION = 7.0;
-    public static final double AGENT_DENSITY = 0.73;
+    public static final double AGENT_DENSITY = 0.70;
     public static final double COP_DENSITY = 0.04;
     public static final boolean MOVEMENT_ON = true;
 
-    public static final double GOVERNMENT_LEGITIMACY = 0.8;
+    public static final double GOVERNMENT_LEGITIMACY = 0.82;
     public static final int MAX_JAIL_TERM = 30;
 
-    public static final String FILENAME = "experiment of rebellion (JAVA)";
+    public static final String FILENAME = "Rebellion experiment 1 (Java)";
     public static final int STEPS = 500;
 
     public static Random rand = new Random();
