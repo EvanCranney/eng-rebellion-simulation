@@ -2,23 +2,34 @@
  *
  */
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Rebellion {
 
-    public static final int WORLD_WIDTH = 10;
-    public static final int WORLD_HEIGHT = 10;
-    public static final double VISION = 1.0;
-    public static final double AGENT_DENSITY = 0.10;
+    public static final int WORLD_WIDTH = 40;
+    public static final int WORLD_HEIGHT = 40;
+    public static final double VISION = 7.0;
+    public static final double AGENT_DENSITY = 0.73;
     public static final double COP_DENSITY = 0.04;
     public static final boolean MOVEMENT_ON = true;
 
-    public static final double GOVERNMENT_LEGITIMACY = 0.2;
+    public static final double GOVERNMENT_LEGITIMACY = 0.8;
     public static final int MAX_JAIL_TERM = 30;
+
+    public static final String FILENAME = "experiment of rebellion (JAVA)";
+    public static final int STEPS = 500;
 
     public static Random rand = new Random();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+
+        PrintWriter pw = new PrintWriter(new File(FILENAME+".csv"));
+        StringBuilder sb = new StringBuilder();
+
+        sb = createCSVFileHeader(sb);
 
         // instantiate grid
         Grid grid = new Grid(WORLD_WIDTH, WORLD_HEIGHT);
@@ -30,11 +41,14 @@ public class Rebellion {
         // instantiate cops
         int numCops = computeNumCops();
         ArrayList<Cop> cops = instantiateCops(numCops, grid);
-        printCurrentGrid(grid);
+        //printCurrentGrid(grid);
 
         // driver loop
-        for (int i=0; i<100; i++) {
-        
+        for (int i=0; i<STEPS; i++) {
+            int jailedAgent = 0;
+            int activeAgent = 0;
+            int quietAgent = 0;
+
             // randomize the order of agents and cops
             Collections.shuffle(agents);
             Collections.shuffle(cops);
@@ -51,14 +65,100 @@ public class Rebellion {
 
             for (Agent agent : agents) {
                 agent.rebel();
+                if (agent.getState(agent) == Agent.State.JAILED){
+                    jailedAgent = jailedAgent + 1;
+                } else if (agent.getState(agent) == Agent.State.ACTIVE) {
+                    activeAgent = activeAgent + 1;
+                } else {
+                    quietAgent = quietAgent + 1;
+                }
             }
 
             for (Cop cop : cops) {
                 cop.enforce();
             }
-            System.out.println();
-            printCurrentGrid(grid);
+
+            sb.append("");
+            sb.append(',');
+            sb.append(jailedAgent);
+            sb.append(',');
+            sb.append(activeAgent);
+            sb.append(',');
+            sb.append(quietAgent);
+            sb.append('\n');
+
+            //System.out.println();
+            //printCurrentGrid(grid);
         }
+        pw.write(sb.toString());
+        pw.close();
+    }
+
+    private static StringBuilder createCSVFileHeader(StringBuilder sb) {
+        Date date = new Date();
+        sb.append("Java Model MCSS (Evan & Shalitha)");
+        sb.append('\n');
+        sb.append("Rebellion");
+        sb.append('\n');
+        sb.append(FILENAME);
+        sb.append('\n');
+        sb.append(date.toString());
+        sb.append('\n');
+        sb.append("min-pxcor,max-pxcor,min-pycor,max-pycor");
+        sb.append('\n');
+        sb.append("0," + (WORLD_WIDTH - 1) + ",0" + (WORLD_HEIGHT - 1));
+        sb.append('\n');
+        sb.append("[run number],1,1,1");
+        sb.append('\n');
+        sb.append("government-legitimacy," + GOVERNMENT_LEGITIMACY);
+        sb.append('\n');
+        sb.append("movement?," + MOVEMENT_ON);
+        sb.append('\n');
+        sb.append("initial-agent-density," + AGENT_DENSITY*100);
+        sb.append('\n');
+        sb.append("vision," + VISION);
+        sb.append('\n');
+        sb.append("max-jail-term," + MAX_JAIL_TERM);
+        sb.append('\n');
+        sb.append("visualization, N/A");
+        sb.append('\n');
+        sb.append("initial-cop-density, " + COP_DENSITY*100);
+        sb.append('\n');
+        sb.append("[reporter]");
+        sb.append(',');
+        sb.append("JAILED");
+        sb.append(',');
+        sb.append("ACTIVE");
+        sb.append(',');
+        sb.append("QUIET");
+        sb.append('\n');
+        sb.append("[final]");
+        sb.append(',');
+        sb.append('\n');
+        sb.append("[min]");
+        sb.append(',');
+        sb.append('\n');
+        sb.append("[max]");
+        sb.append(',');
+        sb.append('\n');
+        sb.append("[mean]");
+        sb.append(',');
+        sb.append('\n');
+        sb.append("[steps]," + STEPS + "," + STEPS + "," + STEPS );
+        sb.append(',');
+        sb.append('\n');
+        sb.append("");
+        sb.append(',');
+        sb.append('\n');
+        sb.append("[all run data]");
+        sb.append(',');
+        sb.append("JAILED");
+        sb.append(',');
+        sb.append("ACTIVE");
+        sb.append(',');
+        sb.append("QUIET");
+        sb.append('\n');
+        return sb;
     }
 
     public static void printCurrentGrid(Grid grid){
@@ -76,10 +176,15 @@ public class Rebellion {
     }
 
     public static int computeNumAgents() {
+        System.out.println("AGENTS COUNT " + ((int) (WORLD_HEIGHT *
+                WORLD_WIDTH *
+                AGENT_DENSITY)));
         return (int) (WORLD_HEIGHT * WORLD_WIDTH * AGENT_DENSITY);
     }
 
     public static int computeNumCops() {
+        System.out.println("COPS COUNT " + ((int) (WORLD_HEIGHT * WORLD_WIDTH *
+                COP_DENSITY)));
         return (int) (WORLD_HEIGHT * WORLD_WIDTH * COP_DENSITY);
     }
 
