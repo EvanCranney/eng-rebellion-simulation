@@ -46,12 +46,12 @@ public class Rebellion {
         SimulationType.ORIGINAL;
 
     // size of iterative decrement in govt legitimacy for extension 1
-    public static final double EXT1_LEGITIMACY_DECREMENT = 0.5;
+    public static final double EXT1_LEGITIMACY_DECREMENT = 0.005;
 
     // size of single decrement in govt legitimacy for extension 2,
     //  and time-step in which decrement should occur
-    public static final double EXT2_LEGITIMACY_DECREMENT = 30;
-    public static final int EXT2_DECREMENT_TIMESTEP = 100;
+    public static final double EXT2_LEGITIMACY_DECREMENT = 0.30;
+    public static final int EXT2_DECREMENT_TIMESTEP = 50;
 
 
     /* Main function
@@ -76,11 +76,11 @@ public class Rebellion {
         StringBuilder sb = new StringBuilder();
         sb = createCSVFileHeader(sb);
 
+        // government legitimacy, variable used in extended model
+        double legitimacy = GOVERNMENT_LEGITIMACY;
+
         // the driver loop
         for (int t=0; t<STEPS; t++) {
-
-            // government legitimacy, variable used in extended model
-            double legitimacy = GOVERNMENT_LEGITIMACY;
 
             // variables to record agent types in each timestep
             int jailedAgent = 0;
@@ -132,18 +132,20 @@ public class Rebellion {
             sb.append(quietAgent);
             sb.append(',');
             sb.append(numCops);
-            sb.append('\n');
+            sb.append(',');
+            sb.append(legitimacy);
 
             // model
             if (Rebellion.simulation == SimulationType.ITERATIVE) {
-                if (legitimacy - EXT1_LEGITIMACY_DECREMENT > 0) {
-                    legitimacy -= EXT1_LEGITIMACY_DECREMENT;
+                if (legitimacy - EXT1_LEGITIMACY_DECREMENT >= 0) {
+                    legitimacy = legitimacy - EXT1_LEGITIMACY_DECREMENT;
                 }
             } else if (Rebellion.simulation == SimulationType.SINGLE) {
                 if (t == EXT2_DECREMENT_TIMESTEP - 1) {
-                    legitimacy -= EXT2_LEGITIMACY_DECREMENT;
+                    legitimacy = legitimacy - EXT2_LEGITIMACY_DECREMENT;
                 }
             }
+            sb.append('\n');
         }
 
         // write metrics to output file
@@ -310,6 +312,8 @@ public class Rebellion {
         sb.append("QUIET");
         sb.append(',');
         sb.append("COPS");
+        sb.append(',');
+        sb.append("LEGIT");
         sb.append('\n');
         return sb;
     }
