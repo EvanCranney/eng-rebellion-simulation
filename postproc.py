@@ -42,9 +42,19 @@ print()
 print()
 print("Summary statistics over rebellions")
 df["IS_REBELLION"] = df["ACTIVE"].apply(lambda x: x >= REBELLION_THRESHOLD)
-for val in df["IS_REBELLION"]:
-    print(val)
-print(df.head())
+rebellions = []
+
+i = 0
+rebellion = []
+while i < df.shape[0]:
+    if not df.at[i, "IS_REBELLION"]:
+        if rebellion != []:
+            rebellions.append((i,rebellion))
+        rebellion = []
+    else:
+        rebellion.append(df.at[i, "ACTIVE"])
+    i += 1
+print (rebellions)
 
 
 
