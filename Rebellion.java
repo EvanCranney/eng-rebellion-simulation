@@ -20,12 +20,12 @@ public class Rebellion {
     public static final int WORLD_HEIGHT = 40;
 
     // simulation parameters
-    public static final double GOVERNMENT_LEGITIMACY = 0.03;
+    public static final double GOVERNMENT_LEGITIMACY = 0.0;
     public static final boolean MOVEMENT_ON = true;
     public static final double AGENT_DENSITY = 0.70;
     public static final double VISION = 7.0;
-    public static final int MAX_JAIL_TERM = 30;
-    public static final double COP_DENSITY = 0.04;
+    public static final int MAX_JAIL_TERM = 1;
+    public static final double COP_DENSITY = 0.00;
 
     // number of steps to run the simulation for
     public static final int STEPS = 200;
@@ -43,7 +43,7 @@ public class Rebellion {
     }
     // ###### CHANGE THIS TO SWITCH BETWEEN EXTENSIONS AND ORIGIAL ######
     public static final SimulationType simulation =
-        SimulationType.SINGLE;
+        SimulationType.ORIGINAL;
 
     // size of iterative decrement in govt legitimacy for extension 1
     public static final double EXT1_LEGITIMACY_DECREMENT = 0.5;
