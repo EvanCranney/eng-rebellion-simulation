@@ -11,16 +11,21 @@ public class Rebellion {
 
     public static final int WORLD_WIDTH = 40;
     public static final int WORLD_HEIGHT = 40;
-    public static final double VISION = 7.0;
-    public static final double AGENT_DENSITY = 0.70;
-    public static final double COP_DENSITY = 0.04;
+
+    public static double GOVERNMENT_LEGITIMACY = 0.03;
     public static final boolean MOVEMENT_ON = true;
-
-    public static final double GOVERNMENT_LEGITIMACY = 0.82;
+    public static final double AGENT_DENSITY = 0.70;
+    public static final double VISION = 7.0;
     public static final int MAX_JAIL_TERM = 30;
+    public static final double COP_DENSITY = 0.04;
 
-    public static final String FILENAME = "Rebellion experiment 1 (Java)";
+    public static final String FILENAME = "Rebellion experiment 0 (Java)";
     public static final int STEPS = 500;
+
+    //EXTENDED FEATURES
+    public static final boolean EXTENDED_FEATURE_ON = false;
+    public static final double MAX_GOVERNMENT_LEGITIMACY = 0.96;
+    public static final double INCREMENTAL_VALUE_GOVERNMENT_LEGITIMACY = 0.002;
 
     public static Random rand = new Random();
 
@@ -64,7 +69,7 @@ public class Rebellion {
             }
 
             for (Agent agent : agents) {
-                agent.rebel();
+                agent.rebel(GOVERNMENT_LEGITIMACY);
                 if (agent.getState(agent) == Agent.State.JAILED){
                     jailedAgent = jailedAgent + 1;
                 } else if (agent.getState(agent) == Agent.State.ACTIVE) {
@@ -85,10 +90,18 @@ public class Rebellion {
             sb.append(activeAgent);
             sb.append(',');
             sb.append(quietAgent);
+            sb.append(',');
+            sb.append(numCops);
             sb.append('\n');
 
             //System.out.println();
             //printCurrentGrid(grid);
+            if (EXTENDED_FEATURE_ON){
+                if (GOVERNMENT_LEGITIMACY < MAX_GOVERNMENT_LEGITIMACY) {
+                    GOVERNMENT_LEGITIMACY = GOVERNMENT_LEGITIMACY +
+                            INCREMENTAL_VALUE_GOVERNMENT_LEGITIMACY;
+                }
+            }
         }
         pw.write(sb.toString());
         pw.close();
@@ -106,7 +119,7 @@ public class Rebellion {
         sb.append('\n');
         sb.append("min-pxcor,max-pxcor,min-pycor,max-pycor");
         sb.append('\n');
-        sb.append("0," + (WORLD_WIDTH - 1) + ",0" + (WORLD_HEIGHT - 1));
+        sb.append("0," + (WORLD_WIDTH - 1) + ",0," + (WORLD_HEIGHT - 1));
         sb.append('\n');
         sb.append("[run number],1,1,1");
         sb.append('\n');
@@ -131,6 +144,8 @@ public class Rebellion {
         sb.append("ACTIVE");
         sb.append(',');
         sb.append("QUIET");
+        sb.append(',');
+        sb.append("COPS");
         sb.append('\n');
         sb.append("[final]");
         sb.append(',');
@@ -157,6 +172,8 @@ public class Rebellion {
         sb.append("ACTIVE");
         sb.append(',');
         sb.append("QUIET");
+        sb.append(',');
+        sb.append("COPS");
         sb.append('\n');
         return sb;
     }

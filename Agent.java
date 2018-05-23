@@ -61,7 +61,7 @@ public class Agent implements Person {
         return this.location;
     }
 
-    public void rebel() {
+    public void rebel(double GOVERNMENT_LEGITIMACY) {
         // if jailed, then can't do anything. just pass time
         if (this.state == Agent.State.JAILED) {
             // reduce jail-term
@@ -74,15 +74,15 @@ public class Agent implements Person {
         }
 
         // otherwise check if agrieved
-        if (this.computeGreivance() >= this.computeRisk() + Agent.EPSILON) {
+        if (this.computeGreivance(GOVERNMENT_LEGITIMACY) >= this.computeRisk() + Agent.EPSILON) {
             this.state = Agent.State.ACTIVE;
         } else {
             this.state = Agent.State.INACTIVE;
         }
     }
 
-    private double computeGreivance() {
-        return this.hardship * (1 - Rebellion.GOVERNMENT_LEGITIMACY);
+    private double computeGreivance(double GOVERNMENT_LEGITIMACY) {
+        return this.hardship * (1 - GOVERNMENT_LEGITIMACY);
     }
 
     private double computeRisk() {
