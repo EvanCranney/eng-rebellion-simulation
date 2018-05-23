@@ -7,7 +7,7 @@
 
 import java.lang.Math;
 
-public class Agent implements Person {
+public class Agent extends Person {
 
     // set of possible agent states
     public enum State {
@@ -24,7 +24,7 @@ public class Agent implements Person {
     private static final double EPSILON = 0.1;
 
     private State state;
-    private Cell location;
+    //private Cell location;
 
     // agent's personal degree of risk aversion, and perceived hardship
     private double aversion;
@@ -34,33 +34,23 @@ public class Agent implements Person {
     private int remainingTerm;
 
     public Agent(double aversion, double hardship, Cell location) {
+        super(location);
         this.aversion = aversion;
         this.hardship = hardship;
-        this.location = location;
-        this.location.enter(this);
+        //this.location = location;
+        //this.location.enter(this);
         this.state = INITIAL_STATE;
         this.remainingTerm = INITIAL_TERM;
     }
 
+    // @override
+    // moves to a random cell in the neighborhood, provided that the
+    //   agent is not currently in jail
     public void move() {
-        // check: not jailed
         if (this.state == Agent.State.JAILED) {
             return;
         }
-
-        // get random cell in vicinity
-        Cell target = this.location.getRandomUnoccupiedNeighbor();
-
-        // change location if there exists an unoccupied neighbor
-        if (target != null) {
-            this.moveTo(target);
-        }
-    }
-
-    private void moveTo(Cell target) {
-        this.location.leave(this);
-        target.enter(this);
-        this.location = target;
+        super.move();
     }
 
     // Checks whether the agent is sufficiently aggreived with the
@@ -107,8 +97,8 @@ public class Agent implements Person {
     //   agents in the neighborhood
     private double computePerceivedDanger() {
         // count the number of cops and active agents in neighborhood
-        int cops = this.location.countCopsInNeighborhood();
-        int agents = this.location.countActiveAgentsInNeighborhood();
+        int cops = super.getLocation().countCopsInNeighborhood();
+        int agents = super.getLocation().countActiveAgentsInNeighborhood();
 
         // denominator is at least 1, for numerical stability
         if (agents <= 0) {
@@ -140,10 +130,5 @@ public class Agent implements Person {
     // get the agent's current state
     public State getState(Agent agent){
         return this.state;
-    }
-
-    // get the agent's current location
-    public Cell getLocation() {
-        return this.location;
     }
 }

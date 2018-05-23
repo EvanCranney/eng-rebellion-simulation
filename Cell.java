@@ -43,6 +43,20 @@ public class Cell {
         this.rand = new Random();
     }
 
+    
+    public void enter(Person person) {
+        if (person instanceof Agent) {
+            this.agents.add((Agent) person);
+        }
+    }
+
+    public void leave(Person person) {
+        if (person instanceof Agent) {
+            this.agents.remove((Agent) person);
+        }
+    }
+
+/*
     // Agent enters the cell
     public void enter(Agent agent) {
         this.agents.add(agent);
@@ -52,7 +66,7 @@ public class Cell {
     public void leave(Agent agent) {
         this.agents.remove(agent);
     }
-
+*/
     // Cop enters the cell
     public void enter(Cop cop) {
         this.cops.add(cop);
