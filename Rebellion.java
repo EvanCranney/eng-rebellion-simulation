@@ -213,6 +213,10 @@ public class Rebellion {
         return rand.nextDouble();
     }
 
+    public static int generateJailTerm() {
+        return rand.nextInt(Rebellion.MAX_JAIL_TERM);
+    }
+
     public static ArrayList<Agent> instantiateAgents(int n, Grid grid) {
         // get cells in the grid
         ArrayList<Cell> cells;

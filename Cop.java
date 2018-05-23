@@ -1,3 +1,9 @@
+/* Implementation of a Cop.
+ *
+ * Arrests active Agents in Rebellion simulation. 
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -38,7 +44,7 @@ public class Cop {
             Agent agent = active.get(0);
             Cell target = agent.getLocation();
             this.moveTo(target);
-            agent.arrest(this.rand.nextInt(Rebellion.MAX_JAIL_TERM));
+            agent.arrest(Rebellion.generateJailTerm());
         }
     }
 
