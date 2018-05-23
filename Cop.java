@@ -10,45 +10,56 @@ import java.util.Random;
 
 public class Cop {
 
-    private Cell location;      // location simulation grid
+    // location in simulation grid
+    private Cell location;
 
     public Cop(Cell location) {
         this.location = location;
         this.location.enter(this);
     }
 
-
-    // moves to a random cell in the vicinity of current location
+    // Execute the "move" action for the cop: moves to a random unoccupied
+    //  unoccupied cell in the vicinity; stays at current location if all
+    //  nearby cells are occupied.
     public void move() {
-        // get random unoccupied cell in vicinity
         Cell target = this.location.getRandomUnoccupiedNeighbor();
-        // change location if possible
         if (target != null) {
             this.moveTo(target);
         }
     }
 
+    // Move from current location to the given target cell.
     private void moveTo(Cell target) {
         this.location.leave(this);
         target.enter(this);
         this.location = target;
     }
 
+    // Execute the "enforce" action for the cop: searches for all active
+    //   agents in the neighborhood, randomly selects one, and arrests
+    //   them. Does nothing if there are no active agents within signt.
     public void enforce() {
-        ArrayList<Agent> active = this.location.getActiveAgentsInNeighborhood();
+        // fetch the list of all active agents in neighborhood
+        ArrayList<Agent> active = 
+            this.location.getActiveAgentsInNeighborhood();
 
-        // if active agent visible, then arrest
+        // if there is at least one active agent within sight ...
         if (active.size() > 0) {
+            // ... choose one of them at random
             Collections.shuffle(active);
             Agent agent = active.get(0);
+
+            // move to the active agent's location
             Cell target = agent.getLocation();
             this.moveTo(target);
+
+            // and arrest them
             agent.arrest(Rebellion.generateJailTerm());
         }
     }
 
+    // Getter: returns cop location
     public Cell getLocation(){
         return this.location;
     }
-
 }
