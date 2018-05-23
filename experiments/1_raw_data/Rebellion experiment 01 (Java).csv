@@ -1,24 +1,24 @@
-Java Model MCSS (Evan & Shalitha)
-Rebellion
-Rebellion experiment 1 (Java)
-Wed May 23 12:17:22 AEST 2018
-min-pxcor,max-pxcor,min-pycor,max-pycor
-0,39,0,39
-[run number],1,1,1
-government-legitimacy,0.82
-movement?,false
-initial-agent-density,70.0
-vision,7.0
-max-jail-term,30
-visualization, N/A
-initial-cop-density, 4.0
+Java Model MCSS (Evan & Shalitha),,,,
+Rebellion,,,,
+Rebellion experiment 1 (Java),,,,
+Wed May 23 12:17:22 AEST 2018,,,,
+min-pxcor,max-pxcor,min-pycor,max-pycor,
+0,39,0,39,
+[run number],1,1,1,
+government-legitimacy,0.82,,,
+movement?,FALSE,,,
+initial-agent-density,70,,,
+vision,7,,,
+max-jail-term,30,,,
+visualization, N/A,,,
+initial-cop-density,4,,,
 [reporter],JAILED,ACTIVE,QUIET,COPS
-[final],
-[min],
-[max],
-[mean],
+[final],,,,
+[min],,,,
+[max],,,,
+[mean],,,,
 [steps],40000,40000,40000,
-,
+,,,,
 [all run data],JAILED,ACTIVE,QUIET,COPS
 ,0,15,1105,64
 ,15,0,1105,64

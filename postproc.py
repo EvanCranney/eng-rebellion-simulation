@@ -32,19 +32,26 @@ import numpy as np
 import seaborn as sns
 
 REBELLION_THRESHOLD = 50  # num active agents to constitue a rebellion
-NETLOGO_DATA_FILE_NAME = "experiments/3_processed_csv/Rebellion experiment 06 (NetLogo).csv"
-JAVA_DATA_FILE_NAME = "experiments/3_processed_csv/Rebellion experiment 06 (Java).csv"
+NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 06 (NetLogo).csv"
+JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 06 (Java).csv"
 
 # read in the excel file
 print("Reading NetLogo file " + NETLOGO_DATA_FILE_NAME)
 print("Reading Java file " + JAVA_DATA_FILE_NAME)
-df_nl = pd.read_csv(NETLOGO_DATA_FILE_NAME)
-df_j = pd.read_csv(JAVA_DATA_FILE_NAME)
+df_nl = pd.read_csv(NETLOGO_DATA_FILE_NAME, skiprows=range(0, 21))
+df_nl.drop(df_nl.iloc[:, 0:1], inplace=True, axis=1)
+df_nl.drop(df_nl.iloc[:, 4:8], inplace=True, axis=1)
+print(df_nl)
+df_j = pd.read_csv(JAVA_DATA_FILE_NAME, skiprows=range(0, 21))
+df_j.drop(df_j.iloc[:, 0:1], inplace=True, axis=1)
+df_j.drop(df_j.iloc[:, 4:8], inplace=True, axis=1)
+print(df_j)
 
 print()
 print("======================================")
 print("Summary statistics over all timesteps (NetLogo):")
 print(df_nl.mean(axis=0))
+print()
 print("Summary statistics over all timesteps (Java):")
 print(df_j.mean(axis=0))
 print("======================================")
@@ -120,45 +127,48 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     n_bins = 12
     x = rebellion_duration
 
-    fig, axes = plt.subplots(nrows=2, ncols=2)
-    fig.suptitle(from_model, fontsize=10)
-    ax0, ax1, ax2, ax3 = axes.flatten()
-
+    fig = plt.figure()
+    # fig, axes = plt.subplots(nrows=2, ncols=2)
+    # fig.suptitle(from_model, fontsize=10)
+    # ax0, ax1, ax2, ax3 = axes.flatten()
+    ax0 = fig.add_subplot(111)
     ax0.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax0.legend(prop={'size': 10})
-    ax0.set_title('R_DUR')
+    ax0.set_title(from_model)
     ax0.set_ylim([0, 1])
 
+    fig = plt.figure()
     x = rebellion_frequency
-
+    ax1 = fig.add_subplot(111)
     ax1.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax1.legend(prop={'size': 10})
-    ax1.set_title('R_FREQ')
+    ax1.set_title(from_model)
+    ax1.set_xlabel("Rebellion Frequency")
+    ax1.set_ylabel("Relative Frequency")
     ax1.set_ylim([0, 0.06])
 
+    fig = plt.figure()
     x = rebellion_active_average
-
+    ax2 = fig.add_subplot(111)
     ax2.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax2.legend(prop={'size': 10})
-    ax2.set_title(' R_AVG')
+    ax2.set_title(from_model)
     ax2.set_ylim([0, 0.02])
 
+    fig = plt.figure()
     x = rebellion_active_max
-
+    ax3 = fig.add_subplot(111)
     ax3.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax3.legend(prop={'size': 10})
-    ax3.set_title('R_MAX')
+    ax3.set_title(from_model)
     ax3.set_ylim([0, 0.013])
 
+    fig = plt.figure()
     time = range(0, 500)
     active_agents = df["ACTIVE"][0:500]
-
-    fig = plt.figure()
-    fig.suptitle(from_model, fontsize=5)
     ax5 = fig.add_subplot(111)
-
     ax5.plot(time, active_agents)
-    ax5.set_title('N_ACTIVE')
+    ax5.set_title(from_model)
     ax5.set_ylim(0, 400)
 
     fig.tight_layout()
@@ -183,5 +193,5 @@ print("======================================")
 
 draw_diagrams(df_nl, rebellion_duration_nl, rebellion_frequency_nl, rebellion_active_average_nl, rebellion_active_max_nl
               , "NetLogo")
-draw_diagrams(df_j, rebellion_duration_j, rebellion_frequency_j, rebellion_active_average_j, rebellion_active_max_j
-              , "Java")
+# draw_diagrams(df_j, rebellion_duration_j, rebellion_frequency_j, rebellion_active_average_j, rebellion_active_max_j
+#              , "Java")
