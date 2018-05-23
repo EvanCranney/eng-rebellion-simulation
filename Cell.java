@@ -43,38 +43,22 @@ public class Cell {
         this.rand = new Random();
     }
 
-    
+    // enter the cell
     public void enter(Person person) {
         if (person instanceof Agent) {
             this.agents.add((Agent) person);
+        } else if (person instanceof Cop){
+            this.cops.add((Cop) person);
         }
     }
 
+    // leave the cell
     public void leave(Person person) {
         if (person instanceof Agent) {
             this.agents.remove((Agent) person);
+        } else if (person instanceof Cop) {
+            this.cops.add((Cop) person);
         }
-    }
-
-/*
-    // Agent enters the cell
-    public void enter(Agent agent) {
-        this.agents.add(agent);
-    }
-
-    // Agent leaves the cell
-    public void leave(Agent agent) {
-        this.agents.remove(agent);
-    }
-*/
-    // Cop enters the cell
-    public void enter(Cop cop) {
-        this.cops.add(cop);
-    }
-
-    // Cop leaves the cell
-    public void leave(Cop cop) {
-        this.cops.remove(cop);
     }
 
     // checks whether the cell is occupied; a cell is regarded as occupied
