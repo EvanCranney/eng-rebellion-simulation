@@ -96,7 +96,7 @@ public class Cell {
        // System.out.println(this.neighbors.size());
     }
 
-    public Cell getRandomNeighbor() {
+    public Cell getRandomUnoccupiedNeighbor() {
         ArrayList<Cell> targets = new ArrayList<Cell>();
         for (Cell cell : this.neighbors) {
             if (!cell.isOccupied()) {

@@ -43,7 +43,7 @@ public class Agent implements Person {
         }
 
         // get random cell in vicinity
-        Cell target = this.location.getRandomNeighbor();
+        Cell target = this.location.getRandomUnoccupiedNeighbor();
 
         // change location if there exists an unoccupied neighbor
         if (target != null) {

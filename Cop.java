@@ -1,6 +1,6 @@
 /* Implementation of a Cop.
  *
- * Arrests active Agents in Rebellion simulation. 
+ * Wanders around the simulation grid; arrests active Agents.
  * 
  */
 
@@ -10,19 +10,18 @@ import java.util.Random;
 
 public class Cop {
 
-    private Cell location;
-
-    private Random rand;
+    private Cell location;      // location simulation grid
 
     public Cop(Cell location) {
         this.location = location;
         this.location.enter(this);
-        this.rand = new Random();
     }
 
+
+    // moves to a random cell in the vicinity of current location
     public void move() {
-        // get ranodm cell in vicinity
-        Cell target = this.location.getRandomNeighbor();
+        // get random unoccupied cell in vicinity
+        Cell target = this.location.getRandomUnoccupiedNeighbor();
         // change location if possible
         if (target != null) {
             this.moveTo(target);
