@@ -41,7 +41,8 @@ Generates the following graphs:
     15
 """
 
-import scipy
+from scipy import stats
+from scipy.stats import ttest_ind
 import pandas as pd
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
@@ -49,18 +50,22 @@ import numpy as np
 import seaborn as sns
 
 REBELLION_THRESHOLD = 50  # num active agents to constitue a rebellion
-NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 15 (NetLogo).csv"
-JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 15 (Java).csv"
+NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 01 (NetLogo).csv"
+JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 01 (Java).csv"
 
 # read in the excel file
 print("Reading NetLogo file " + NETLOGO_DATA_FILE_NAME)
 df_nl = pd.read_csv(NETLOGO_DATA_FILE_NAME, skiprows=range(0, 21))
 df_nl.drop(df_nl.iloc[:, 0:1], inplace=True, axis=1)
 df_nl.drop(df_nl.iloc[:, 4:8], inplace=True, axis=1)
+# extended model
+# df_nl.drop(df_nl.iloc[:, 5:8], inplace=True, axis=1)
 print("Reading Java file " + JAVA_DATA_FILE_NAME)
 df_j = pd.read_csv(JAVA_DATA_FILE_NAME, skiprows=range(0, 21))
 df_j.drop(df_j.iloc[:, 0:1], inplace=True, axis=1)
 df_j.drop(df_j.iloc[:, 4:8], inplace=True, axis=1)
+# extended model
+# df_j.drop(df_j.iloc[:, 5:8], inplace=True, axis=1)
 
 df_nl_header = pd.read_csv(NETLOGO_DATA_FILE_NAME, skiprows=range(0, 7), nrows=6)
 df_nl_header.drop(df_nl_header.iloc[:, 2:5], inplace=True, axis=1)
@@ -147,6 +152,8 @@ def find_rebellion_active_max(rebellions):
 def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_average, rebellion_active_max,
                   from_model):
     n_bins = 12
+    print("HERRE")
+    print(df.head())
 
     fig = plt.figure()
     # fig, axes = plt.subplots(nrows=2, ncols=2)
@@ -205,7 +212,23 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     ax5.set_title(ax5_title, fontsize=20)
     ax5.set_xlabel("Time-Step", fontsize=20)
     ax5.set_ylabel("Number of Active Agents", fontsize=20)
-    ax5.set_ylim(0, 200)
+    ax5.set_ylim(0, 10)
+
+    # # chart for extended model
+    # time = range(0, 200)
+    # active_agents = df["ACTIVE"][0:200]
+    # government_legitimacy = df["LEGIT"][0:200]
+    # fig, ax5 = plt.subplots()
+    # ax6 = ax5.twinx()
+    # ax5.plot(time, active_agents, color='black')
+    # ax6.plot(time, government_legitimacy, color='gray', linestyle='--')
+    # ax5_title = 'N_ACTIVE Time Series'
+    # ax5.set_title(ax5_title, fontsize=20)
+    # ax5.set_xlabel("Time-Step", fontsize=20)
+    # ax5.set_ylabel("Number of Active Agents", fontsize=20)
+    # ax6.set_ylabel("Government Legitimacy", fontsize=20)
+    # ax5.set_ylim(0, 50)
+
 
     fig.tight_layout()
     plt.show()
@@ -225,9 +248,25 @@ rebellion_duration_j = find_rebellion_duration(rebellions_j)
 rebellion_frequency_j = find_rebellion_frequency(rebellions_j)
 rebellion_active_average_j = find_rebellion_active_average(rebellions_j)
 rebellion_active_max_j = find_rebellion_active_max(rebellions_j)
-print("======================================")
+print("===============t-tests================")
+#
+# var_a = rebellion_duration_nl.var(ddof=1)
+# var_b = rebellion_duration_j[0:10000].var(ddof=1)
+# s = np.sqrt((var_a + var_b)/2)
+# # Calculate the t-statistics
+# t = (rebellion_duration_j[0:10000].mean() - rebellion_duration_nl[0:10000].mean())/(s*np.sqrt(2/10000))
+# df = 2*10000 - 2
+# # p-value after comparison with the t
+# p = 1 - stats.t.cdf(t, df=df)
+# print("t = " + str(t))
+# print("p = " + str(2*p))
+# t2, p2 = stats.ttest_ind(rebellion_duration_j[0:10000], rebellion_duration_nl[0:10000])
+# print("t = " + str(t2))
+# print("p = " + str(2*p2))
+print("t-test (duration): ", ttest_ind(rebellion_duration_nl, rebellion_duration_j))
 
+print("======================================")
 draw_diagrams(df_nl, rebellion_duration_nl, rebellion_frequency_nl, rebellion_active_average_nl, rebellion_active_max_nl
-               , "NetLogo")
+              , "NetLogo")
 draw_diagrams(df_j, rebellion_duration_j, rebellion_frequency_j, rebellion_active_average_j, rebellion_active_max_j
               , "Java")
