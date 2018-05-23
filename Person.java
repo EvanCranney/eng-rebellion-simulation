@@ -18,7 +18,7 @@ public abstract class Person {
         }
     }
 
-    private void moveTo(Cell target) {
+    public void moveTo(Cell target) {
         this.location.leave(this);
         target.enter(this);
         this.location = target;
