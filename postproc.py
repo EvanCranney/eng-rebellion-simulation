@@ -22,6 +22,24 @@ Generates the following graphs:
     Prefix
     _nj: To identify NetLogo doc related attributes
     _j: To identify Java doc related attributes
+
+    Experiments: Punctuated Equilibrium
+    movement off ~ on experiments
+    01 ~ 06
+    02 ~ 07
+    03 ~ 08
+    04 ~ 09
+    05 ~ 10
+
+    Quiescence
+    11
+    12
+    13
+
+    Anarchy
+    14
+    15
+    16
 """
 
 import scipy
@@ -32,8 +50,8 @@ import numpy as np
 import seaborn as sns
 
 REBELLION_THRESHOLD = 50  # num active agents to constitue a rebellion
-NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 01 (NetLogo).csv"
-JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 01 (Java).csv"
+NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 11 (NetLogo).csv"
+JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 11 (Java).csv"
 
 # read in the excel file
 print("Reading NetLogo file " + NETLOGO_DATA_FILE_NAME)
@@ -140,10 +158,10 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     ax0.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax0.legend(prop={'size': 10})
     ax0_title = from_model + ', R_DUR Distribution'
-    ax0.set_title(ax0_title)
-    ax0.set_xlabel("Rebellion Frequency")
-    ax0.set_ylabel("Relative Frequency")
-    ax0.set_ylim([0, 1])
+    ax0.set_title(ax0_title, fontsize=20)
+    ax0.set_xlabel("Rebellion Frequency", fontsize=20)
+    ax0.set_ylabel("Relative Frequency", fontsize=20)
+    ax0.set_ylim([0, 0.6])
 
     fig = plt.figure()
     x = rebellion_frequency
@@ -151,9 +169,9 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     ax1.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax1.legend(prop={'size': 10})
     ax1_title = from_model + ', R_FREQ Distribution'
-    ax1.set_title(ax1_title)
-    ax1.set_xlabel("Rebellion Frequency")
-    ax1.set_ylabel("Relative Frequency")
+    ax1.set_title(ax1_title, fontsize=20)
+    ax1.set_xlabel("Rebellion Frequency", fontsize=20)
+    ax1.set_ylabel("Relative Frequency", fontsize=20)
     ax1.set_ylim([0, 0.06])
     # fig.text(.15, .05, df_nl_header)
 
@@ -163,10 +181,10 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     ax2.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax2.legend(prop={'size': 10})
     ax2_title = from_model + ', R_AVG Distribution'
-    ax2.set_title(ax2_title)
-    ax2.set_xlabel("Rebellion Frequency")
-    ax2.set_ylabel("Rebellion Average Size")
-    ax2.set_ylim([0, 0.02])
+    ax2.set_title(ax2_title, fontsize=20)
+    ax2.set_xlabel("Rebellion Frequency", fontsize=20)
+    ax2.set_ylabel("Rebellion Average Size", fontsize=20)
+    ax2.set_ylim([0, 0.014])
 
     fig = plt.figure()
     x = rebellion_active_max
@@ -174,21 +192,21 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     ax3.hist(x, n_bins, normed=1, histtype='bar', color='black')
     ax3.legend(prop={'size': 10})
     ax3_title = from_model + ', R_MAX Distribution'
-    ax3.set_title(ax3_title)
-    ax3.set_xlabel("Rebellion Frequency")
-    ax3.set_ylabel("Relative Frequency")
-    ax3.set_ylim([0, 0.013])
+    ax3.set_title(ax3_title, fontsize=20)
+    ax3.set_xlabel("Rebellion Frequency", fontsize=20)
+    ax3.set_ylabel("Relative Frequency", fontsize=20)
+    ax3.set_ylim([0, 0.0045])
 
-    # fig = plt.figure()
-    # time = range(0, 500)
-    # active_agents = df["ACTIVE"][0:500]
-    # ax5 = fig.add_subplot(111)
-    # ax5.plot(time, active_agents)
-    # ax5_title = from_model + ', R_FREQ Distribution'
-    # ax5.set_title(ax5_title)
-    # ax5.set_xlabel("Time-Step")
-    # ax5.set_ylabel("Number of Active Agents")
-    # ax5.set_ylim(0, 400)
+    fig = plt.figure()
+    time = range(0, 500)
+    active_agents = df["ACTIVE"][0:500]
+    ax5 = fig.add_subplot(111)
+    ax5.plot(time, active_agents)
+    ax5_title = from_model + ', N_ACTIVE Distribution'
+    ax5.set_title(ax5_title, fontsize=20)
+    ax5.set_xlabel("Time-Step", fontsize=20)
+    ax5.set_ylabel("Number of Active Agents", fontsize=20)
+    ax5.set_ylim(0, 550)
 
     fig.tight_layout()
     plt.show()
