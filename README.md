@@ -12,7 +12,7 @@ Cell
     enter()
     leave()
 
-
+Neighborhood
     neighborhood : Cell[]
     cops : Cop[]
     agents : Agent[]
