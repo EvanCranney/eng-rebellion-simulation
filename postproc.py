@@ -49,7 +49,7 @@ rebellion = []
 while i < df.shape[0]:
     if not df.at[i, "IS_REBELLION"]:
         if rebellion != []:
-            rebellions.append((i,rebellion))
+            rebellions.append((i-len(rebellion),rebellion))
         rebellion = []
     else:
         rebellion.append(df.at[i, "ACTIVE"])
