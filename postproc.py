@@ -18,115 +18,170 @@ Generates the following graphs:
     (3) Histogram of REBELLION_ACTIVE_AVG
     (4) Histogram of REBELLION_ACTIVE_MAX
     (5) Time series of COUNT_ACTIVE
+
+    Prefix
+    _nj: To identify NetLogo doc related attributes
+    _j: To identify Java doc related attributes
 """
 
+import scipy
 import pandas as pd
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-REBELLION_THRESHOLD = 50 # num active agents to constitue a rebellion
-DATA_FILE_NAME = "experiments/3_processed_csv/Rebellion experiment 06 (NetLogo).csv"
+REBELLION_THRESHOLD = 50  # num active agents to constitue a rebellion
+NETLOGO_DATA_FILE_NAME = "experiments/3_processed_csv/Rebellion experiment 06 (NetLogo).csv"
+JAVA_DATA_FILE_NAME = "experiments/3_processed_csv/Rebellion experiment 06 (Java).csv"
 
 # read in the excel file
-print("Reading file " + DATA_FILE_NAME)
-df = pd.read_csv(DATA_FILE_NAME)
+print("Reading NetLogo file " + NETLOGO_DATA_FILE_NAME)
+print("Reading Java file " + JAVA_DATA_FILE_NAME)
+df_nl = pd.read_csv(NETLOGO_DATA_FILE_NAME)
+df_j = pd.read_csv(JAVA_DATA_FILE_NAME)
 
 print()
 print("======================================")
-print("Summary statistics over all timesteps:")
-print(df.mean(axis=0))
+print("Summary statistics over all timesteps (NetLogo):")
+print(df_nl.mean(axis=0))
+print("Summary statistics over all timesteps (Java):")
+print(df_j.mean(axis=0))
 print("======================================")
 print()
 
+df_nl["IS_REBELLION"] = df_nl["ACTIVE"].apply(lambda x: x >= REBELLION_THRESHOLD)
 
-print()
-print("Summary statistics over rebellions")
-df["IS_REBELLION"] = df["ACTIVE"].apply(lambda x: x >= REBELLION_THRESHOLD)
-rebellions = []
-
-i = 0
-rebellion = []
-while i < df.shape[0]:
-    if not df.at[i, "IS_REBELLION"]:
-        if rebellion != []:
-            rebellions.append((i-len(rebellion),rebellion))
-        rebellion = []
-    else:
-        rebellion.append(df.at[i, "ACTIVE"])
-    i += 1
-# print(rebellions)
-
-rebellion_duration = []
-for t, actives in rebellions:
-    rebellion_duration.append(len(actives))
-print("REBELLION_DURATION: ", rebellion_duration)
-
-rebellion_frequency = []
-for i in range(1,len(rebellions)):
-    rebellion_frequency.append(rebellions[i][0] - rebellions[i-1][0])
-print("REBELLION_FREQUENCY: ", rebellion_frequency)
-
-rebellion_active_average = []
-for t, actives in rebellions:
-    rebellion_active_average.append(reduce(lambda x, y: x + y, actives) / (1.0*len(actives)))
-print("REBELLION_ACTIVE_AVG: ", rebellion_active_average)
-
-rebellion_active_max = []
-for t, actives in rebellions:
-    rebellion_active_max.append(max(actives))
-print("REBELLION_ACTIVE_MAX: ", rebellion_active_max)
-print()
-print("Average of REBELLION_ACTIVE_MAX: ", reduce(lambda x, y: x + y, rebellion_active_max) / (1.0*len(rebellion_active_max)))
-print("Average of REBELLION_ACTIVE_AVG: ", reduce(lambda x, y: x + y, rebellion_active_average) / (1.0*len(rebellion_active_average)))
-print("Average of REBELLION_FREQUENCY: ", reduce(lambda x, y: x + y, rebellion_frequency) / (1.0*len(rebellion_frequency)))
-print("Average of REBELLION_DURATION: ", reduce(lambda x, y: x + y, rebellion_duration) / (1.0*len(rebellion_duration)))
-
-np.random.seed(0)
-
-# n_bins = 12
-# x = rebellion_duration
-
-# fig, axes = plt.subplots(nrows=2, ncols=2)
-# ax0, ax1, ax2, ax3 = axes.flatten()
-
-# ax0.hist(x, n_bins, normed=1, histtype='bar', color='black')
-# ax0.legend(prop={'size': 10})
-# ax0.set_title('R_DUR')
-# ax0.set_ylim([0, 1])
-#
-# x = rebellion_frequency
-#
-# ax1.hist(x, n_bins, normed=1, histtype='bar', color='black')
-# ax1.legend(prop={'size': 10})
-# ax1.set_title('R_FREQ')
-# ax1.set_ylim([0, 0.06])
-
-# x = rebellion_active_average
-#
-# ax2.hist(x, n_bins, normed=1, histtype='bar', color='black')
-# ax2.legend(prop={'size': 10})
-# ax2.set_title(' R_AVG')
-# ax2.set_ylim([0, 0.02])
-#
-# x = rebellion_active_max
-#
-# ax3.hist(x, n_bins, normed=1, histtype='bar', color='black')
-# ax3.legend(prop={'size': 10})
-# ax3.set_title('R_MAX')
-# ax3.set_ylim([0, 0.013])
+df_j["IS_REBELLION"] = df_j["ACTIVE"].apply(lambda x: x >= REBELLION_THRESHOLD)
 
 
-time = range(0, 500)
-active_agents = df["ACTIVE"][0:500]
+def find_rebellions(df):
+    rebellions = []
+    i = 0
+    rebellion = []
+    while i < df.shape[0]:
+        if not df.at[i, "IS_REBELLION"]:
+            if rebellion != []:
+                rebellions.append((i - len(rebellion), rebellion))
+            rebellion = []
+        else:
+            rebellion.append(df.at[i, "ACTIVE"])
+        i += 1
+    return rebellions
+    # print(rebellions)
 
-fig = plt.figure()
-ax0 = fig.add_subplot(111)
 
-line = ax0.plot(time, active_agents)
-ax0.set_title('N_ACTIVE')
-ax0.set_ylim(0, 400)
+def find_rebellion_duration(rebellions):
+    rebellion_duration = []
+    for t, actives in rebellions:
+        rebellion_duration.append(len(actives))
+    print("REBELLION_DURATION ", rebellion_duration)
+    print("Average of REBELLION_DURATION: ", reduce(lambda x, y: x + y, rebellion_duration) / (1.0 *
+                                                                                               len(rebellion_duration)))
+    print()
+    return rebellion_duration
 
-fig.tight_layout()
-plt.show()
+
+def find_rebellion_frequency(rebellions):
+    rebellion_frequency = []
+    for i in range(1, len(rebellions)):
+        rebellion_frequency.append(rebellions[i][0] - rebellions[i - 1][0])
+    print("REBELLION_FREQUENCY ", rebellion_frequency)
+    print("Average of REBELLION_FREQUENCY: ",
+          reduce(lambda x, y: x + y, rebellion_frequency) / (1.0 * len(rebellion_frequency)))
+    print()
+    return rebellion_frequency
+
+
+def find_rebellion_active_average(rebellions):
+    rebellion_active_average = []
+    for t, actives in rebellions:
+        rebellion_active_average.append(reduce(lambda x, y: x + y, actives) / (1.0 * len(actives)))
+    print("REBELLION_ACTIVE_AVG", rebellion_active_average)
+    print("Average of REBELLION_ACTIVE_AVG: ",
+          reduce(lambda x, y: x + y, rebellion_active_average) / (1.0 * len(rebellion_active_average)))
+    print()
+    return rebellion_active_average
+
+
+def find_rebellion_active_max(rebellions):
+    rebellion_active_max = []
+    for t, actives in rebellions:
+        rebellion_active_max.append(max(actives))
+    print("REBELLION_ACTIVE_MAX", rebellion_active_max)
+    print("Average of REBELLION_ACTIVE_MAX: ",
+          reduce(lambda x, y: x + y, rebellion_active_max) / (1.0 * len(rebellion_active_max)))
+    print()
+    return rebellion_active_max
+
+
+def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_average, rebellion_active_max,
+                  from_model):
+    n_bins = 12
+    x = rebellion_duration
+
+    fig, axes = plt.subplots(nrows=2, ncols=2)
+    fig.suptitle(from_model, fontsize=10)
+    ax0, ax1, ax2, ax3 = axes.flatten()
+
+    ax0.hist(x, n_bins, normed=1, histtype='bar', color='black')
+    ax0.legend(prop={'size': 10})
+    ax0.set_title('R_DUR')
+    ax0.set_ylim([0, 1])
+
+    x = rebellion_frequency
+
+    ax1.hist(x, n_bins, normed=1, histtype='bar', color='black')
+    ax1.legend(prop={'size': 10})
+    ax1.set_title('R_FREQ')
+    ax1.set_ylim([0, 0.06])
+
+    x = rebellion_active_average
+
+    ax2.hist(x, n_bins, normed=1, histtype='bar', color='black')
+    ax2.legend(prop={'size': 10})
+    ax2.set_title(' R_AVG')
+    ax2.set_ylim([0, 0.02])
+
+    x = rebellion_active_max
+
+    ax3.hist(x, n_bins, normed=1, histtype='bar', color='black')
+    ax3.legend(prop={'size': 10})
+    ax3.set_title('R_MAX')
+    ax3.set_ylim([0, 0.013])
+
+    time = range(0, 500)
+    active_agents = df["ACTIVE"][0:500]
+
+    fig = plt.figure()
+    fig.suptitle(from_model, fontsize=5)
+    ax5 = fig.add_subplot(111)
+
+    ax5.plot(time, active_agents)
+    ax5.set_title('N_ACTIVE')
+    ax5.set_ylim(0, 400)
+
+    fig.tight_layout()
+    plt.show()
+
+
+rebellions_nl = find_rebellions(df_nl)
+rebellions_j = find_rebellions(df_j)
+print("==================NetLogo=============")
+
+rebellion_duration_nl = find_rebellion_duration(rebellions_nl)
+rebellion_frequency_nl = find_rebellion_frequency(rebellions_nl)
+rebellion_active_average_nl = find_rebellion_active_average(rebellions_nl)
+rebellion_active_max_nl = find_rebellion_active_max(rebellions_nl)
+print("=====================Java=============")
+
+rebellion_duration_j = find_rebellion_duration(rebellions_j)
+rebellion_frequency_j = find_rebellion_frequency(rebellions_j)
+rebellion_active_average_j = find_rebellion_active_average(rebellions_j)
+rebellion_active_max_j = find_rebellion_active_max(rebellions_j)
+print("======================================")
+
+draw_diagrams(df_nl, rebellion_duration_nl, rebellion_frequency_nl, rebellion_active_average_nl, rebellion_active_max_nl
+              , "NetLogo")
+draw_diagrams(df_j, rebellion_duration_j, rebellion_frequency_j, rebellion_active_average_j, rebellion_active_max_j
+              , "Java")
