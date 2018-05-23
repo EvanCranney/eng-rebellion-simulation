@@ -1,6 +1,5 @@
 /*
  *
- *
  */
 
 public interface Person {
