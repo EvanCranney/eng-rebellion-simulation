@@ -24,7 +24,7 @@ public class Grid {
         }
         for (int r = 0; r < this.numRows; r++) {
             for (int c = 0; c < this.numCols; c++) {
-                this.grid[r][c].addNeighbors(this);
+                this.grid[r][c].addNeighbors(this, Rebellion.VISION);
             }
         }
     }
