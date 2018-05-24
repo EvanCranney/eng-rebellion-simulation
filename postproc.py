@@ -50,8 +50,8 @@ import numpy as np
 import seaborn as sns
 
 REBELLION_THRESHOLD = 50  # num active agents to constitue a rebellion
-NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 01 (NetLogo).csv"
-JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 01 (Java).csv"
+NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 15 (NetLogo).csv"
+JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 15 (Java).csv"
 
 # read in the excel file
 print("Reading NetLogo file " + NETLOGO_DATA_FILE_NAME)
@@ -110,8 +110,8 @@ def find_rebellion_duration(rebellions):
     for t, actives in rebellions:
         rebellion_duration.append(len(actives))
     print("REBELLION_DURATION ", rebellion_duration)
-    # print("Average of REBELLION_DURATION: ", reduce(lambda x, y: x + y, rebellion_duration) / (1.0 *
-    #                                                                                            len(rebellion_duration)))
+    print("Average of REBELLION_DURATION: ", reduce(lambda x, y: x + y, rebellion_duration) / (1.0 *
+                                                                                               len(rebellion_duration)))
     print()
     return rebellion_duration
 
@@ -121,8 +121,8 @@ def find_rebellion_frequency(rebellions):
     for i in range(1, len(rebellions)):
         rebellion_frequency.append(rebellions[i][0] - rebellions[i - 1][0])
     print("REBELLION_FREQUENCY ", rebellion_frequency)
-    # print("Average of REBELLION_FREQUENCY: ",
-    #       reduce(lambda x, y: x + y, rebellion_frequency) / (1.0 * len(rebellion_frequency)))
+    print("Average of REBELLION_FREQUENCY: ",
+          reduce(lambda x, y: x + y, rebellion_frequency) / (1.0 * len(rebellion_frequency)))
     print()
     return rebellion_frequency
 
@@ -132,8 +132,8 @@ def find_rebellion_active_average(rebellions):
     for t, actives in rebellions:
         rebellion_active_average.append(reduce(lambda x, y: x + y, actives) / (1.0 * len(actives)))
     print("REBELLION_ACTIVE_AVG", rebellion_active_average)
-    # print("Average of REBELLION_ACTIVE_AVG: ",
-    #       reduce(lambda x, y: x + y, rebellion_active_average) / (1.0 * len(rebellion_active_average)))
+    print("Average of REBELLION_ACTIVE_AVG: ",
+          reduce(lambda x, y: x + y, rebellion_active_average) / (1.0 * len(rebellion_active_average)))
     print()
     return rebellion_active_average
 
@@ -143,8 +143,8 @@ def find_rebellion_active_max(rebellions):
     for t, actives in rebellions:
         rebellion_active_max.append(max(actives))
     print("REBELLION_ACTIVE_MAX", rebellion_active_max)
-    # print("Average of REBELLION_ACTIVE_MAX: ",
-    #       reduce(lambda x, y: x + y, rebellion_active_max) / (1.0 * len(rebellion_active_max)))
+    print("Average of REBELLION_ACTIVE_MAX: ",
+          reduce(lambda x, y: x + y, rebellion_active_max) / (1.0 * len(rebellion_active_max)))
     print()
     return rebellion_active_max
 
@@ -249,21 +249,13 @@ rebellion_frequency_j = find_rebellion_frequency(rebellions_j)
 rebellion_active_average_j = find_rebellion_active_average(rebellions_j)
 rebellion_active_max_j = find_rebellion_active_max(rebellions_j)
 print("===============t-tests================")
-#
-# var_a = rebellion_duration_nl.var(ddof=1)
-# var_b = rebellion_duration_j[0:10000].var(ddof=1)
-# s = np.sqrt((var_a + var_b)/2)
-# # Calculate the t-statistics
-# t = (rebellion_duration_j[0:10000].mean() - rebellion_duration_nl[0:10000].mean())/(s*np.sqrt(2/10000))
-# df = 2*10000 - 2
-# # p-value after comparison with the t
-# p = 1 - stats.t.cdf(t, df=df)
-# print("t = " + str(t))
-# print("p = " + str(2*p))
-# t2, p2 = stats.ttest_ind(rebellion_duration_j[0:10000], rebellion_duration_nl[0:10000])
-# print("t = " + str(t2))
-# print("p = " + str(2*p2))
+print("t-test (active): ", ttest_ind(df_nl["ACTIVE"], df_j["ACTIVE"]))
+print("t-test (quiet): ", ttest_ind(df_nl["QUIET"], df_j["QUIET"]))
+print("t-test (jailed): ", ttest_ind(df_nl["JAILED"], df_j["JAILED"]))
+print("t-test (frequency): ", ttest_ind(rebellion_frequency_nl, rebellion_frequency_j))
 print("t-test (duration): ", ttest_ind(rebellion_duration_nl, rebellion_duration_j))
+print("t-test (active_average): ", ttest_ind(rebellion_active_average_nl, rebellion_active_average_j))
+print("t-test (active_max): ", ttest_ind(rebellion_active_max_nl, rebellion_active_max_j))
 
 print("======================================")
 draw_diagrams(df_nl, rebellion_duration_nl, rebellion_frequency_nl, rebellion_active_average_nl, rebellion_active_max_nl
