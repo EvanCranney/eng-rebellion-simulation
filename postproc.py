@@ -50,8 +50,8 @@ import numpy as np
 import seaborn as sns
 
 REBELLION_THRESHOLD = 50  # num active agents to constitue a rebellion
-NETLOGO_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 15 (NetLogo).csv"
-JAVA_DATA_FILE_NAME = "experiments/1_raw_data/Rebellion experiment 15 (Java).csv"
+NETLOGO_DATA_FILE_NAME = "experiments/Rebellion experiment 01 (NetLogo).csv"
+JAVA_DATA_FILE_NAME = "experiments/Rebellion experiment 01 (Java).csv"
 
 # read in the excel file
 print("Reading NetLogo file " + NETLOGO_DATA_FILE_NAME)
@@ -229,6 +229,24 @@ def draw_diagrams(df, rebellion_duration, rebellion_frequency, rebellion_active_
     # ax6.set_ylabel("Government Legitimacy", fontsize=20)
     # ax5.set_ylim(0, 50)
 
+    # # chart to compare active, jailed, quiet with cops
+    # time = range(0, 500)
+    # active_agents = df["ACTIVE"][0:500]
+    # jailed_agents = df["JAILED"][0:500]
+    # inactive_agents = df["QUIET"][0:500]
+    # cops = df["COPS"][0:500]
+    # fig = plt.figure()
+    # ax5 = fig.add_subplot(111)
+    #
+    # ax5.plot(time, active_agents, label='Active', color='black')
+    # ax5.plot(time, jailed_agents, label='Jailed', color='black', linestyle='--')
+    # ax5.plot(time, inactive_agents, label='Quiet', color='black', linestyle=':')
+    # ax5.plot(time, cops, label='Cops', color='black', linestyle='-.', linewidth=3)
+    # ax5_title = from_model + ', Time Series'
+    # ax5.set_title(ax5_title, fontsize=20)
+    # plt.xlabel('Time')
+    # plt.legend(loc='best', fontsize=20)
+    # # ax5.set_ylim(0, 50)
 
     fig.tight_layout()
     plt.show()
