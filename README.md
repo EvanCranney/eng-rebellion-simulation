@@ -3,14 +3,6 @@
 Java implementation of the NetLogo Rebellion model. Based on Epstein 2002's
 "Modeling Civil Violence: An Agent-Based Computational Approach".
 
-## Contributers
-
-
-| Name                              |      Email                            |Student  
-|-----------------------------------|:-------------------------------------:|------------------:|
-| Evan Cranney                      |  e.cranney@student.unimelb.edu.au     | 584281          |
-| Shalitha Weerakoon Karunatilleke  |  sweerakoon@student.unimelb.edu.au   	| 822379        |
-
 ## Guide  
 Change the following parameters from the Rebellion.java class to run the 
 experiments (This part is similar to the NetLogo Rebellion model)
